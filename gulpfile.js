@@ -2,6 +2,7 @@
 //
 // @author Gaëtan Bonnot
 // @see @GaetanBt on Twitter
+// @see gaetanbt.com
 //
 // @note To do : Try to launch Bower
 //               Concatenate and minify JS files
