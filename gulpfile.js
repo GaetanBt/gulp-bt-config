@@ -14,7 +14,7 @@
 
 // Variables
 // --------------------
-var gulp          = require('gulp'),
+var gulp           = require('gulp'),
 
 	// Tools
 	clean      = require('gulp-clean'),
