@@ -27,9 +27,10 @@ var gulp           = require('gulp'),
 // Paths
 // --------------------
 var paths = {
-	css:           './css/',
-	sass:          './scss/style.scss',
-	sass_partials: './scss/partials/*.scss'
+	css:             './css/',
+	livereload_port: '3000',
+	sass:            './scss/style.scss',
+	sass_partials:   './scss/partials/*.scss'
 };
 
 
@@ -63,7 +64,7 @@ gulp.task('sass', function(){
 gulp.task('watch', function(){
 
 	// Set up livereload to a specific port (it doesn't work for me without specifying a port)
-	var server = livereload(3000);
+	var server = livereload(paths.livereload_port);
 	
 	// Watch changes to run the Sass task
 	gulp.watch([paths.sass, paths.sass_partials], ['sass']);
