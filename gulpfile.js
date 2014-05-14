@@ -4,9 +4,11 @@
 // @see @GaetanBt on Twitter
 // @see gaetanbt.com
 //
-// @note To do : Try to launch Bower
-//               Concatenate and minify JS files
-//               Optimize images
+// @note To do : [x] Try to launch Bower - I'm using gulp-bower
+//			[] Try gulp-bower-files
+//			[] Try gulp-bower-src
+//               [] Concatenate and minify JS files
+//               [] Optimize images
 // 
 // @note Inspired by gulp-config from Gaëtan Ark 
 // @see https://github.com/gaetanark/gulp-config/blob/master/gulpfile.js
@@ -14,9 +16,10 @@
 
 // Variables
 // --------------------
-var gulp           = require('gulp'),
+var 	gulp           = require('gulp'),
 
 	// Tools
+	bower      = require('gulp-bower'),
 	clean      = require('gulp-clean'),
 	livereload = require('gulp-livereload'),
 	plumber    = require('gulp-plumber'),
@@ -27,6 +30,7 @@ var gulp           = require('gulp'),
 // Paths
 // --------------------
 var paths = {
+	bower_rc:        './vendors',
 	css:             './css/',
 	livereload_port: '3000',
 	sass:            './scss/style.scss',
@@ -37,6 +41,11 @@ var paths = {
 // Tasks
 // --------------------
 
+// Launch Bower
+gulp.task('bower', function(){
+  bower(paths.bower_rc);
+});
+
 // Clean the minified stylesheet folder
 gulp.task('clean', function(){
   gulp.src(paths.css, {read: false})
@@ -46,7 +55,7 @@ gulp.task('clean', function(){
 // Compile Sass files
 gulp.task('sass', function(){
 	return gulp.src(paths.sass)
-		
+
 		// Prevent streams to be unpiped by errors
 		.pipe(plumber())
 
@@ -65,7 +74,7 @@ gulp.task('watch', function(){
 
 	// Set up livereload to a specific port (it doesn't work for me without specifying a port)
 	var server = livereload(paths.livereload_port);
-	
+
 	// Watch changes to run the Sass task
 	gulp.watch([paths.sass, paths.sass_partials], ['sass']);
 
@@ -76,5 +85,5 @@ gulp.task('watch', function(){
 	});
 });
 
-// Default task - we clean the project before lauching the sass task
-gulp.task('default', ['clean', 'sass']);
+// Default task - Lauch bower & clean the project before lauching the sass task
+gulp.task('default', ['bower', 'clean', 'sass']);
