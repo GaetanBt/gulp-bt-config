@@ -5,8 +5,8 @@
 // @see gaetanbt.com
 //
 // @note To do : [x] Try to launch Bower - I'm using gulp-bower
-//			[] Try gulp-bower-files
-//			[] Try gulp-bower-src
+//					[] Try gulp-bower-files
+//					[] Try gulp-bower-src
 //               [] Concatenate and minify JS files
 //               [] Optimize images
 // 
@@ -16,7 +16,7 @@
 
 // Variables
 // --------------------
-var 	gulp           = require('gulp'),
+var	gulp       = require('gulp'),
 
 	// Tools
 	bower      = require('gulp-bower'),
@@ -43,13 +43,15 @@ var paths = {
 
 // Launch Bower
 gulp.task('bower', function(){
-  bower(paths.bower_rc);
+	
+	// Refers automatically to the bower.json file
+	bower(paths.bower_rc);
 });
 
 // Clean the minified stylesheet folder
 gulp.task('clean', function(){
-  gulp.src(paths.css, {read: false})
-    .pipe(clean());
+	gulp.src(paths.css, {read: false})
+		.pipe(clean());
 });
 
 // Compile Sass files
