@@ -32,7 +32,7 @@ var	gulp       = require('gulp'),
 var paths = {
 	bower_rc:        './vendors',
 	css:             './css/',
-	livereload_port: '3000',
+	livereload_port:  3000,
 	sass:            './scss/style.scss',
 	sass_partials:   './scss/partials/*.scss'
 };
