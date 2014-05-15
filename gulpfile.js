@@ -76,7 +76,7 @@ gulp.task('sass', function(){
 
 		// Minified compiled stylesheet
 		.pipe(sass({style: 'compressed'}))
-		.pipe(rename('style.min.css'))
+		.pipe(rename({suffix: '.min'}))
 		.pipe(gulp.dest(paths.css));
 });
 
