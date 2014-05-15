@@ -58,7 +58,7 @@ gulp.task('clean', function(){
 	gulp.src(paths.css, {read: false})
 		.pipe(clean());
     
-    // Clean minified JS folder	
+	// Clean minified JS folder	
 	gulp.src(paths.js_output, {read: false})
 		.pipe(clean());
 });
