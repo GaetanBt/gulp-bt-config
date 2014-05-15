@@ -72,7 +72,7 @@ gulp.task('sass', function(){
 
 		// Compiled & readable stylesheet
 		.pipe(sass({style: 'expanded'}))
-		.pipe(gulp.dest('css/'))
+		.pipe(gulp.dest(paths.css))
 
 		// Minified compiled stylesheet
 		.pipe(sass({style: 'compressed'}))
