@@ -7,7 +7,7 @@
 // @note To do : [x] Try to launch Bower - I'm using gulp-bower
 //					[] Try gulp-bower-files
 //					[] Try gulp-bower-src
-//               [] Concatenate and minify JS files
+//               [x] Concatenate and minify JS files - I don't concatenate JS files because I conditionnaly load jQuery depending on the page
 //               [] Optimize images
 // 
 // @note Inspired by gulp-config from Gaëtan Ark 
@@ -24,7 +24,8 @@ var	gulp       = require('gulp'),
 	livereload = require('gulp-livereload'),
 	plumber    = require('gulp-plumber'),
 	rename     = require('gulp-rename'),
-	sass       = require('gulp-ruby-sass');
+	sass       = require('gulp-ruby-sass'),
+	uglify     = require('gulp-uglify');
 
 
 // Paths
@@ -32,6 +33,8 @@ var	gulp       = require('gulp'),
 var paths = {
 	bower_rc:        './vendors',
 	css:             './css/',
+	js:              './js/',
+	js_output:       './js/min/',
 	livereload_port:  3000,
 	sass:            './scss/style.scss',
 	sass_partials:   './scss/partials/*.scss'
@@ -43,14 +46,20 @@ var paths = {
 
 // Launch Bower
 gulp.task('bower', function(){
-	
+
 	// Refers automatically to the bower.json file
 	bower(paths.bower_rc);
 });
 
-// Clean the minified stylesheet folder
+// Clean the minified folders
 gulp.task('clean', function(){
+	
+	// Clean CSS folder
 	gulp.src(paths.css, {read: false})
+		.pipe(clean());
+    
+    // Clean minified JS folder	
+	gulp.src(paths.js_output, {read: false})
 		.pipe(clean());
 });
 
@@ -71,6 +80,21 @@ gulp.task('sass', function(){
 		.pipe(gulp.dest(paths.css));
 });
 
+// Minify all JS files
+gulp.task('js', function(){
+    return gulp.src(paths.js + '*.js')
+        
+		// Prevent streams to be unpiped by errors
+		.pipe(plumber())
+    
+		// Show error message when needed
+		.pipe(uglify().on('error', function(err){console.warn(err)}))
+        
+		// Rename minified file & save it in the min folder
+		.pipe(rename({suffix: '.min'}))
+		.pipe(gulp.dest(paths.js_output));
+});
+
 // Watch files & livereload (require livereload browser extension)
 gulp.task('watch', function(){
 
@@ -79,7 +103,10 @@ gulp.task('watch', function(){
 
 	// Watch changes to run the Sass task
 	gulp.watch([paths.sass, paths.sass_partials], ['sass']);
-
+    
+    	// Watch changes on JS files to run the minification task
+    	gulp.watch(paths.js + '*.js', ['js']);
+    
 	// Watch changes of the compiled stylesheet and html files to refresh the page
 	gulp.watch(['index.html', paths.css + 'style.css']).on('change', function(event){
 		server.changed(event.path);
@@ -88,4 +115,4 @@ gulp.task('watch', function(){
 });
 
 // Default task - Lauch bower & clean the project before lauching the sass task
-gulp.task('default', ['bower', 'clean', 'sass']);
+gulp.task('default', ['bower', 'clean', 'sass', 'js']);
