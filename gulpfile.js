@@ -5,11 +5,23 @@
 // @see gaetanbt.com
 //
 // @note To do : [x] Try to launch Bower - I'm using gulp-bower
-//					[] Try gulp-bower-files
-//					[] Try gulp-bower-src
+//                   [] Try gulp-bower-files
+//                   [] Try gulp-bower-src
 //               [x] Concatenate and minify JS files - I don't concatenate JS files because I conditionnaly load jQuery depending on the page
-//               [] Optimize images
+//               [x] Optimize images
 // 
+// Structure of a basic project:
+//
+//      == Dev (work in this folder)
+//        - css
+//        - img
+//        - js
+//        - scss
+//      == Prod (all the compiled - minified - optimized files go there. These are the ones that must be used by the project)
+//        - css
+//        - img
+//        - js
+//
 // @note Inspired by gulp-config from Gaëtan Ark 
 // @see https://github.com/gaetanark/gulp-config/blob/master/gulpfile.js
 
@@ -21,6 +33,7 @@ var	gulp       = require('gulp'),
 	// Tools
 	bower      = require('gulp-bower'),
 	clean      = require('gulp-clean'),
+	imagemin   = require('gulp-imagemin'),
 	livereload = require('gulp-livereload'),
 	plumber    = require('gulp-plumber'),
 	rename     = require('gulp-rename'),
@@ -32,12 +45,24 @@ var	gulp       = require('gulp'),
 // --------------------
 var paths = {
 	bower_rc:        './vendors',
-	css:             './css/',
-	js:              './js/',
 	js_output:       './js/min/',
 	livereload_port:  3000,
-	sass:            './scss/style.scss',
-	sass_partials:   './scss/partials/*.scss'
+
+	dev:              {
+		folder:           './dev/',
+		css:              './dev/css/',
+		img:              './dev/img/',
+		js:               './dev/js/',
+		sass:             './dev/scss/style.scss',
+		sass_partials:    './dev/scss/partials/*.scss'
+	},
+    
+	prod:             {
+		folder:           './prod/',
+		css:              './prod/css/',
+		img:              './prod/img/',
+		js:               './prod/js/'
+	}
 };
 
 
@@ -51,40 +76,41 @@ gulp.task('bower', function(){
 	bower(paths.bower_rc);
 });
 
-// Clean the minified folders
+// Clean the production folder
 gulp.task('clean', function(){
-	
-	// Clean CSS folder
-	gulp.src(paths.css, {read: false})
-		.pipe(clean());
-    
-	// Clean minified JS folder	
-	gulp.src(paths.js_output, {read: false})
+	return gulp.src(paths.prod.img, {read: false})
 		.pipe(clean());
 });
 
+// Optimize images
+gulp.task('images', ['clean'], function(){
+	return gulp.src(paths.dev.img + '**/*')
+		.pipe(imagemin({read: false}))
+		.pipe(gulp.dest(paths.prod.img));
+}); 
+
 // Compile Sass files
 gulp.task('sass', function(){
-	return gulp.src(paths.sass)
+	return gulp.src(paths.dev.sass)
 
 		// Prevent streams to be unpiped by errors
 		.pipe(plumber())
 
 		// Compiled & readable stylesheet
 		.pipe(sass({style: 'expanded'}))
-		.pipe(gulp.dest(paths.css))
+		.pipe(gulp.dest(paths.dev.css))
 
 		// Minified compiled stylesheet
 		.pipe(sass({style: 'compressed'}))
 		.pipe(rename({suffix: '.min'}))
-		.pipe(gulp.dest(paths.css));
+		.pipe(gulp.dest(paths.prod.css));
 });
 
 // Minify all JS files
 gulp.task('js', function(){
-    return gulp.src(paths.js + '*.js')
+	return gulp.src(paths.dev.js + '*.js')
         
-		// Prevent streams to be unpiped by errors
+		//Prevent streams to be unpiped by errors
 		.pipe(plumber())
     
 		// Show error message when needed
@@ -92,7 +118,7 @@ gulp.task('js', function(){
         
 		// Rename minified file & save it in the min folder
 		.pipe(rename({suffix: '.min'}))
-		.pipe(gulp.dest(paths.js_output));
+		.pipe(gulp.dest(paths.prod.js));
 });
 
 // Watch files & livereload (require livereload browser extension)
@@ -102,17 +128,17 @@ gulp.task('watch', function(){
 	var server = livereload(paths.livereload_port);
 
 	// Watch changes to run the Sass task
-	gulp.watch([paths.sass, paths.sass_partials], ['sass']);
+	gulp.watch([paths.dev.sass, paths.dev.sass_partials], ['sass']);
     
     	// Watch changes on JS files to run the minification task
-    	gulp.watch(paths.js + '*.js', ['js']);
+    	gulp.watch(paths.dev.js + '*.js', ['js']);
     
 	// Watch changes of the compiled stylesheet and html files to refresh the page
-	gulp.watch(['index.html', paths.css + 'style.css']).on('change', function(event){
+	gulp.watch(['index.html', paths.prod.css + 'style.css']).on('change', function(event){
 		server.changed(event.path);
 		console.log(event.path + ' has been modified.');
 	});
 });
 
 // Default task - Lauch bower & clean the project before lauching the sass task
-gulp.task('default', ['bower', 'clean', 'sass', 'js']);
+gulp.task('default', ['bower', 'sass', 'js', 'images']);
