@@ -76,7 +76,7 @@ gulp.task('bower', function(){
 	bower(paths.bower_rc);
 });
 
-// Clean the production folder
+// Clean the production images' folder
 gulp.task('clean', function(){
 	return gulp.src(paths.prod.img, {read: false})
 		.pipe(clean());
