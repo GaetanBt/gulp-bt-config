@@ -38,13 +38,14 @@ var	gulp       = require('gulp'),
 	plumber    = require('gulp-plumber'),
 	rename     = require('gulp-rename'),
 	sass       = require('gulp-ruby-sass'),
-	uglify     = require('gulp-uglify');
+	uglify     = require('gulp-uglify'),
+	zip        = require('gulp-zip');
 
 
 // Paths
 // --------------------
 var paths = {
-	bower_rc:        './vendors',
+	bower_rc:        './prod/vendors/',
 	js_output:       './js/min/',
 	livereload_port:  3000,
 
@@ -119,6 +120,13 @@ gulp.task('js', function(){
 		// Rename minified file & save it in the min folder
 		.pipe(rename({suffix: '.min'}))
 		.pipe(gulp.dest(paths.prod.js));
+});
+
+// Zip production files
+gulp.task('zip', function(){
+	return gulp.src(['./*.html', './*.php', paths.prod.folder + '**/*'])
+		.pipe(zip('prod.zip'))
+		.pipe(gulp.dest('.'));
 });
 
 // Watch files & livereload (require livereload browser extension)
