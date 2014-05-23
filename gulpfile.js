@@ -46,7 +46,6 @@ var	gulp       = require('gulp'),
 // --------------------
 var paths = {
 	bower_rc:        './prod/vendors/',
-	js_output:       './js/min/',
 	livereload_port:  3000,
 
 	dev:              {
