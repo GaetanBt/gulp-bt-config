@@ -60,6 +60,7 @@ var paths = {
 	prod:             {
 		folder:           './prod/',
 		css:              './prod/css/',
+		html_files        './prod/*.html',
 		img:              './prod/img/',
 		js:               './prod/js/'
 	}
@@ -123,7 +124,7 @@ gulp.task('js', function(){
 
 // Zip production files
 gulp.task('zip', function(){
-	return gulp.src(['./*.html', './*.php', paths.prod.folder + '**/*'])
+	return gulp.src([paths.prod.html_files, './*.php', paths.prod.folder + '**/*'])
 		.pipe(zip('prod.zip'))
 		.pipe(gulp.dest('.'));
 });
@@ -141,7 +142,7 @@ gulp.task('watch', function(){
     	gulp.watch(paths.dev.js + '*.js', ['js']);
     
 	// Watch changes of the compiled stylesheet and html files to refresh the page
-	gulp.watch(['index.html', paths.prod.css + 'style.css']).on('change', function(event){
+	gulp.watch([paths.prod.html_files, paths.prod.css + 'style.css']).on('change', function(event){
 		server.changed(event.path);
 		console.log(event.path + ' has been modified.');
 	});
