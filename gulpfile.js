@@ -60,9 +60,10 @@ var paths = {
 	prod:             {
 		folder:           './prod/',
 		css:              './prod/css/',
-		html_files:       './prod/*.html',
+		html_files:       './prod/**/*.html',
 		img:              './prod/img/',
-		js:               './prod/js/'
+		js:               './prod/js/',
+		php_files:        './prod/**/*.php'
 	}
 };
 
@@ -124,7 +125,7 @@ gulp.task('js', function(){
 
 // Zip production files
 gulp.task('zip', function(){
-	return gulp.src([paths.prod.html_files, './*.php', paths.prod.folder + '**/*'])
+	return gulp.src([paths.prod.html_files, paths.prod.php_files, paths.prod.folder + '**/*'])
 		.pipe(zip('prod.zip'))
 		.pipe(gulp.dest('.'));
 });
