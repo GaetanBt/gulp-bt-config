@@ -60,7 +60,7 @@ var paths = {
 	prod:             {
 		folder:           './prod/',
 		css:              './prod/css/',
-		html_files        './prod/*.html',
+		html_files:       './prod/*.html',
 		img:              './prod/img/',
 		js:               './prod/js/'
 	}
