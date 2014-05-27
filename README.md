@@ -31,11 +31,17 @@ This configuration imposes you to work with a defined structure. Basically, this
 I suppose that you already have [NodeJs](http://nodejs.org/), [Bower](http://bower.io/), [Git](http://git-scm.com/) & [Gulp ](http://gulpjs.com) installed on your computer.
 
 
-#### Installation
+#### Install the configuration in your project
 
 Create a folder named *dev* in your project folder. This will be your working folder. Then, run your terminal to begin to use Gulp.
 
-First of all, you have to install the gulp dependencies specified in *package.json*. Just run:
+First of all, you have to globally install Gulp in your project. Open it in your terminal and run:
+
+```
+$ npm install -g gulp
+```
+
+Then, you need to install the gulp dependencies specified in *package.json*. Just run:
 
 ```
 $ npm install
