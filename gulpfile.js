@@ -48,7 +48,7 @@ var paths = {
 	bower_rc:        './prod/vendors/',
 	livereload_port:  3000,
 	html_files:      './**/*.html',
-	php_files:       './**/*.php'
+	php_files:       './**/*.php',
 
 	dev:              {
 		folder:           './dev/',
