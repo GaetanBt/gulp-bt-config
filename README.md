@@ -1,6 +1,6 @@
 # gulp-bt-config
 
-## Simple [Gulp ](http://gulpjs.com) configuration used for my personnal projects. 
+## Simple [Gulp](http://gulpjs.com) configuration used for my personnal projects. 
 
 ### Things it does :
 
